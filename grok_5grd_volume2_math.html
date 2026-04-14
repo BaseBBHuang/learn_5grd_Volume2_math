@@ -1,0 +1,1146 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📘 小学五年级数学下册·人教版 学习宝典</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+        :root {
+            --tw-color-primary: #3b82f6;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', system-ui, sans-serif;
+        }
+
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+            color: #3b82f6;
+        }
+
+        .section-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 思维导图样式 */
+        .mindmap-container {
+            position: relative;
+            padding: 40px 20px 20px;
+            overflow-x: auto;
+        }
+
+        .mindmap-root {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .mindmap-root-node {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+            color: white;
+            font-size: 1.35rem;
+            font-weight: 700;
+            padding: 18px 40px;
+            border-radius: 60px;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.35), 0 0 0 6px rgba(139, 92, 246, 0.15);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            animation: rootPulse 3s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+
+        @keyframes rootPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 32px rgba(99, 102, 241, 0.35), 0 0 0 6px rgba(139, 92, 246, 0.15);
+            }
+
+            50% {
+                box-shadow: 0 8px 40px rgba(99, 102, 241, 0.5), 0 0 0 10px rgba(139, 92, 246, 0.1);
+            }
+        }
+
+        .mindmap-branches {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .mindmap-branches {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .mindmap-branches {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .branch-card {
+            border-radius: 20px;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(.4, 0, .2, 1), box-shadow 0.35s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .branch-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .branch-header {
+            padding: 20px 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .branch-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .branch-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.3;
+        }
+
+        .branch-count {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            color: white;
+            margin-top: 2px;
+        }
+
+        .branch-toggle {
+            margin-left: auto;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background 0.3s;
+            flex-shrink: 0;
+            color: white;
+            font-size: 0.85rem;
+        }
+
+        .branch-toggle.expanded {
+            transform: rotate(180deg);
+        }
+
+        .branch-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(.4, 0, .2, 1), padding 0.35s;
+            background: white;
+            padding: 0 18px;
+        }
+
+        .branch-body.open {
+            max-height: 800px;
+            padding: 16px 18px 20px;
+        }
+
+        .topic-group {
+            margin-bottom: 14px;
+            animation: topicSlideIn 0.35s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes topicSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .topic-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .topic-name::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .topic-name:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .topic-tag {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-left: 4px;
+            white-space: nowrap;
+        }
+
+        .sub-topics {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+            padding-left: 30px;
+        }
+
+        .sub-topics.open {
+            max-height: 300px;
+        }
+
+        .sub-item {
+            font-size: 0.85rem;
+            color: #6b7280;
+            padding: 5px 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .sub-item:hover {
+            color: #374151;
+            transform: translateX(4px);
+        }
+
+        .sub-item::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #d1d5db;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .sub-item:hover::before {
+            background: #9ca3af;
+        }
+
+        .connector-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, #8b5cf6, transparent);
+            border-radius: 2px;
+        }
+
+        .connector-dots {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .connector-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            position: relative;
+            animation: dotBounce 2s ease-in-out infinite;
+        }
+
+        .connector-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes dotBounce {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        /* 板块配色 */
+        .branch-blue .branch-header {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .branch-emerald .branch-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .branch-amber .branch-header {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .branch-rose .branch-header {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+        }
+
+        .mindmap-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .mindmap-toolbar button {
+            font-size: 0.82rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .mindmap-toolbar button:hover {
+            background: #f3f4f6;
+            color: #374151;
+            border-color: #d1d5db;
+        }
+
+        .mindmap-legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .quiz-question {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-correct {
+            animation: pop 0.3s ease;
+        }
+    </style>
+</head>
+
+<body class="tail-container bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+    <!-- 头部 -->
+    <div class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-12 h-12 bg-indigo-500 text-white rounded-2xl flex items-center justify-center text-3xl shadow-inner">
+                    📖</div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 tracking-tight">五年级数学下册</h1>
+                    <p class="text-indigo-600 text-sm font-medium -mt-1">人教版 · 互动学习宝典</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8 text-lg font-medium text-gray-700">
+                <a onclick="navigateTo('mindmap')"
+                    class="nav-link cursor-pointer flex items-center gap-1 hover:text-indigo-600">🧭 思维导图</a>
+                <a onclick="navigateTo('formula')"
+                    class="nav-link cursor-pointer flex items-center gap-1 hover:text-indigo-600">⚡ 公式速查</a>
+                <a onclick="navigateTo('practice')"
+                    class="nav-link cursor-pointer flex items-center gap-1 hover:text-indigo-600">🎯 互动练习</a>
+                <a onclick="navigateTo('life')"
+                    class="nav-link cursor-pointer flex items-center gap-1 hover:text-indigo-600">🌍 生活场景</a>
+                <a onclick="navigateTo('pitfall')"
+                    class="nav-link cursor-pointer flex items-center gap-1 hover:text-indigo-600">🛡️ 避坑指南</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <div onclick="startNewPractice()"
+                    class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2 rounded-3xl font-medium flex items-center gap-2 cursor-pointer shadow-md">
+                    <span>🚀 立即练习</span>
+                </div>
+                <div
+                    class="text-xs bg-white border border-gray-200 rounded-3xl px-4 py-2 flex items-center gap-2 shadow-sm">
+                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    小朋友加油！
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- 欢迎横幅 -->
+        <div
+            class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-3xl p-8 mb-12 flex items-center gap-8 shadow-xl">
+            <div class="flex-1">
+                <div
+                    class="inline-flex items-center gap-2 bg-white/20 text-white text-sm font-medium px-4 py-1 rounded-3xl mb-4">
+                    人教版 · 五年级下册</div>
+                <h2 class="text-5xl font-bold leading-none mb-4">数学原来这么有趣！<br>一站式互动学习宝典</h2>
+                <p class="text-xl opacity-90">思维导图 + 公式速查 + 互动练习 + 生活场景 + 避坑指南<br>帮你轻松掌握整本书，全方位提升数学能力！</p>
+                <div class="mt-6 flex gap-4">
+                    <button onclick="navigateTo('mindmap')"
+                        class="bg-white text-indigo-600 hover:bg-amber-100 px-8 py-4 rounded-3xl font-semibold flex items-center gap-2 text-lg">🧭
+                        先看全貌思维导图</button>
+                    <button onclick="navigateTo('practice')"
+                        class="border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-3xl font-semibold flex items-center gap-2 text-lg">🎯
+                        马上开始互动练习</button>
+                </div>
+            </div>
+            <div class="hidden lg:flex flex-col items-center text-center">
+                <div class="text-8xl mb-2">📘</div>
+                <div class="text-6xl rotate-12">✨</div>
+                <p class="text-sm mt-4 max-w-[180px] opacity-80">已帮无数小朋友考出满分！</p>
+            </div>
+        </div>
+
+        <!-- 1. 思维导图 -->
+        <div id="mindmap" class="mb-20 scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-4xl">🧭</span>
+                <h2 class="text-3xl font-bold text-gray-800">思维导图 · 整本书全貌一览</h2>
+                <span
+                    class="px-4 py-1 bg-indigo-100 text-indigo-700 text-sm font-medium rounded-3xl">按“数与运算、图形与几何、统计与概率、数学思维”四大板块整理</span>
+            </div>
+            <p class="text-gray-600 mb-6 max-w-2xl">点击板块头部可展开/收起，点击知识点可查看具体内容。箭头标注了学习先后顺序（先学基础 → 后学应用），孩子一看就懂整本书的知识骨架！
+            </p>
+
+            <div
+                class="bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 rounded-3xl p-8 shadow-lg border border-gray-100/80">
+                <div class="mindmap-container">
+                    <div class="mindmap-toolbar">
+                        <button onclick="mindmapExpandAll()">📂 全部展开</button>
+                        <button onclick="mindmapCollapseAll()">📁 全部收起</button>
+                    </div>
+
+                    <!-- 中心节点 -->
+                    <div class="mindmap-root">
+                        <div class="mindmap-root-node">📘 五年级下册数学（人教版）</div>
+                    </div>
+
+                    <div class="connector-dots" style="margin-bottom:28px;">
+                        <div class="connector-dot" style="background:#3b82f6; animation-delay:0s;"></div>
+                        <div class="connector-dot" style="background:#10b981; animation-delay:0.3s;"></div>
+                        <div class="connector-dot" style="background:#f59e0b; animation-delay:0.6s;"></div>
+                        <div class="connector-dot" style="background:#f43f5e; animation-delay:0.9s;"></div>
+                    </div>
+
+                    <!-- 四大板块 -->
+                    <div class="mindmap-branches">
+
+                        <!-- ① 数与运算 -->
+                        <div class="branch-card branch-blue" style="box-shadow:0 4px 24px rgba(59,130,246,0.15);">
+                            <div class="branch-header" onclick="toggleBranch(this)">
+                                <div class="branch-icon">🔢</div>
+                                <div>
+                                    <div class="branch-title">数与运算</div>
+                                    <div class="branch-count">3 个主知识点 · 12 个子项</div>
+                                </div>
+                                <div class="branch-toggle">▼</div>
+                            </div>
+                            <div class="branch-body">
+                                <div class="topic-group" style="animation-delay:.05s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">因数和倍数 <span
+                                            class="topic-tag">基础·先学</span></div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">因数和倍数的认识（相互依存）</div>
+                                        <div class="sub-item">2、5、3的倍数特征</div>
+                                        <div class="sub-item">质数、合数、完全数</div>
+                                        <div class="sub-item">奇数与偶数运算规律</div>
+                                    </div>
+                                </div>
+                                <div class="topic-group" style="animation-delay:.12s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">分数的意义和性质 <span
+                                            class="topic-tag">基于整数运算</span></div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">分数意义（单位1的平均分）</div>
+                                        <div class="sub-item">分数与除法关系</div>
+                                        <div class="sub-item">分数的基本性质</div>
+                                    </div>
+                                </div>
+                                <div class="topic-group" style="animation-delay:.19s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">分数的加法和减法 <span
+                                            class="topic-tag">基于分数性质</span></div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">同分母分数加减</div>
+                                        <div class="sub-item">异分母分数加减（通分）</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ② 图形与几何 -->
+                        <div class="branch-card branch-emerald" style="box-shadow:0 4px 24px rgba(16,185,129,0.15);">
+                            <div class="branch-header" onclick="toggleBranch(this)">
+                                <div class="branch-icon">📐</div>
+                                <div>
+                                    <div class="branch-title">图形与几何</div>
+                                    <div class="branch-count">4 个主知识点 · 10 个子项</div>
+                                </div>
+                                <div class="branch-toggle">▼</div>
+                            </div>
+                            <div class="branch-body">
+                                <div class="topic-group" style="animation-delay:.05s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">观察物体（三） <span
+                                            class="topic-tag">几何基础</span></div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">从三个方向看几何体</div>
+                                        <div class="sub-item">小正方体摆放与视图</div>
+                                    </div>
+                                </div>
+                                <div class="topic-group" style="animation-delay:.12s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">长方体和正方体 <span
+                                            class="topic-tag">先认识→后计算</span></div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">长方体特征（面、棱、顶点）</div>
+                                        <div class="sub-item">正方体（特殊长方体）</div>
+                                        <div class="sub-item">表面积公式</div>
+                                        <div class="sub-item">体积公式</div>
+                                    </div>
+                                </div>
+                                <div class="topic-group" style="animation-delay:.19s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">探索图形 & 图形运动（三）</div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">图形运动（旋转、平移）</div>
+                                        <div class="sub-item">空间想象力</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ③ 统计与概率 -->
+                        <div class="branch-card branch-amber" style="box-shadow:0 4px 24px rgba(245,158,11,0.15);">
+                            <div class="branch-header" onclick="toggleBranch(this)">
+                                <div class="branch-icon">📊</div>
+                                <div>
+                                    <div class="branch-title">统计与概率</div>
+                                    <div class="branch-count">1 个主知识点 · 3 个子项</div>
+                                </div>
+                                <div class="branch-toggle">▼</div>
+                            </div>
+                            <div class="branch-body">
+                                <div class="topic-group" style="animation-delay:.05s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">折线统计图</div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">折线统计图的画法与阅读</div>
+                                        <div class="sub-item">数据变化趋势预测</div>
+                                        <div class="sub-item">统计的价值</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ④ 数学思维 -->
+                        <div class="branch-card branch-rose" style="box-shadow:0 4px 24px rgba(244,63,94,0.15);">
+                            <div class="branch-header" onclick="toggleBranch(this)">
+                                <div class="branch-icon">🧩</div>
+                                <div>
+                                    <div class="branch-title">数学思维</div>
+                                    <div class="branch-count">2 个主知识点 · 4 个子项</div>
+                                </div>
+                                <div class="branch-toggle">▼</div>
+                            </div>
+                            <div class="branch-body">
+                                <div class="topic-group" style="animation-delay:.05s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">怎样通知最快 <span
+                                            class="topic-tag">优化思维</span></div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">最短路径问题</div>
+                                        <div class="sub-item">实际生活应用</div>
+                                    </div>
+                                </div>
+                                <div class="topic-group" style="animation-delay:.12s">
+                                    <div class="topic-name" onclick="toggleSubTopics(this)">数学广角——找次品 <span
+                                            class="topic-tag">推理模型</span></div>
+                                    <div class="sub-topics">
+                                        <div class="sub-item">找次品策略（天平称量）</div>
+                                        <div class="sub-item">数学模型与推理</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mindmap-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#3b82f6;"></div>数与运算
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#10b981;"></div>图形与几何
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#f59e0b;"></div>统计与概率
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#f43f5e;"></div>数学思维
+                        </div>
+                        <div class="legend-item" style="margin-left:12px;">💡 点击板块展开 · 箭头=学习顺序</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 公式速查 -->
+        <div id="formula" class="mb-20 scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-4xl">⚡</span>
+                <h2 class="text-3xl font-bold text-gray-800">公式速查表 · 核心10大概念</h2>
+            </div>
+            <p class="text-gray-600 mb-6">仅限五年级下册，最重要10个概念/公式，每条附一句话解释 + 简单例子。随时查！</p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse bg-white rounded-3xl overflow-hidden shadow-inner">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+                            <th class="px-8 py-5 text-left font-medium w-1/4">概念 / 公式</th>
+                            <th class="px-8 py-5 text-left font-medium w-2/5">一句话解释</th>
+                            <th class="px-8 py-5 text-left font-medium">简单例子</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y text-gray-700">
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">因数和倍数</td>
+                            <td class="px-8 py-6">整数除法中商是整数且余数为0，除数就是被除数的因数，被除数就是除数的倍数</td>
+                            <td class="px-8 py-6">12÷2=6 → 2是12的因数，12是2的倍数</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">2的倍数</td>
+                            <td class="px-8 py-6">个位上是0、2、4、6、8的数都是2的倍数（偶数）</td>
+                            <td class="px-8 py-6">24、36、100（个位都是偶数）</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">3的倍数</td>
+                            <td class="px-8 py-6">各位数字之和是3的倍数的数就是3的倍数</td>
+                            <td class="px-8 py-6">2+4=6（是3的倍数）→ 24是3的倍数</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">质数与合数</td>
+                            <td class="px-8 py-6">只有1和它本身两个因数的数是质数；除了1和本身还有其他因数的是合数</td>
+                            <td class="px-8 py-6">2、3、5是质数；4、6、9是合数</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">长方体表面积</td>
+                            <td class="px-8 py-6">6个面的面积之和 = 2×(长×宽 + 长×高 + 宽×高)</td>
+                            <td class="px-8 py-6">长6、宽5、高4 → 2×(30+24+20)=148</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">正方体表面积</td>
+                            <td class="px-8 py-6">6个面完全相同 = 6×棱长²</td>
+                            <td class="px-8 py-6">棱长5 → 6×25=150</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">长方体体积</td>
+                            <td class="px-8 py-6">长×宽×高（物体占空间的大小）</td>
+                            <td class="px-8 py-6">长6、宽4、高5 → 120</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">正方体体积</td>
+                            <td class="px-8 py-6">棱长³（特殊长方体体积）</td>
+                            <td class="px-8 py-6">棱长4 → 64</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">分数意义</td>
+                            <td class="px-8 py-6">把单位“1”平均分成若干份，表示这样的一份或几份的数</td>
+                            <td class="px-8 py-6">把1平均分成5份，取3份 → 3/5</td>
+                        </tr>
+                        <tr>
+                            <td class="px-8 py-6 font-semibold">分数加减法</td>
+                            <td class="px-8 py-6">同分母直接分子相加减；异分母先通分再加减</td>
+                            <td class="px-8 py-6">1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. 互动练习 -->
+        <div id="practice" class="mb-20 scroll-mt-20">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="text-4xl">🎯</span>
+                    <h2 class="text-3xl font-bold text-gray-800">互动练习 · 随机出10道题</h2>
+                </div>
+                <div class="flex gap-3 bg-white rounded-3xl p-1 shadow-inner">
+                    <button onclick="startPractice(1)" id="level1-btn"
+                        class="px-6 py-3 rounded-3xl font-medium text-sm flex items-center gap-2 hover:bg-indigo-50 transition-colors">🟢
+                        基础</button>
+                    <button onclick="startPractice(2)" id="level2-btn"
+                        class="px-6 py-3 rounded-3xl font-medium text-sm flex items-center gap-2 hover:bg-amber-50 transition-colors">🟡
+                        提高</button>
+                    <button onclick="startPractice(3)" id="level3-btn"
+                        class="px-6 py-3 rounded-3xl font-medium text-sm flex items-center gap-2 hover:bg-red-50 transition-colors">🔴
+                        挑战</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-inner p-8" id="quiz-container">
+                <div id="quiz-start-screen" class="text-center py-12">
+                    <div class="text-6xl mb-6">🎲</div>
+                    <h3 class="text-2xl font-semibold mb-2">准备好开始练习了吗？</h3>
+                    <p class="text-gray-500 mb-8">选择难度 → 系统随机抽取10道题<br>每题答完立即反馈 + 详细解析</p>
+                    <div class="flex justify-center gap-4">
+                        <button onclick="startPractice(1)"
+                            class="bg-emerald-500 text-white px-10 py-4 rounded-3xl font-semibold flex items-center gap-3">🟢
+                            开始基础练习</button>
+                        <button onclick="startPractice(2)"
+                            class="bg-amber-500 text-white px-10 py-4 rounded-3xl font-semibold flex items-center gap-3">🟡
+                            开始提高练习</button>
+                        <button onclick="startPractice(3)"
+                            class="bg-red-500 text-white px-10 py-4 rounded-3xl font-semibold flex items-center gap-3">🔴
+                            开始挑战练习</button>
+                    </div>
+                </div>
+
+                <div id="quiz-active" class="hidden">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <span class="text-sm bg-gray-100 px-4 py-1 rounded-3xl" id="current-level-badge"></span>
+                            <span class="ml-4 text-gray-500 text-sm">第 <span id="progress"
+                                    class="font-bold text-indigo-600">1</span>/10 题</span>
+                        </div>
+                        <button onclick="endPractice()"
+                            class="text-gray-400 hover:text-red-500 text-sm flex items-center gap-1">🏠 结束本次练习</button>
+                    </div>
+                    <div id="questions-list" class="space-y-10"></div>
+                    <div class="mt-12 flex justify-between items-center border-t pt-8">
+                        <div class="flex items-center gap-8">
+                            <div class="text-2xl font-bold">得分：<span id="score" class="text-emerald-500">0</span>/10
+                            </div>
+                            <button onclick="checkAllAnswers()"
+                                class="bg-violet-500 hover:bg-violet-600 text-white px-8 py-4 rounded-3xl font-semibold">一键检查所有答案</button>
+                        </div>
+                        <button onclick="generateNewQuiz()"
+                            class="flex items-center gap-2 text-indigo-600 font-medium">🔄 换一套新题</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 生活场景 -->
+        <div id="life" class="mb-20 scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-4xl">🌍</span>
+                <h2 class="text-3xl font-bold text-gray-800">数学原来这么有用 · 生活场景小手册</h2>
+            </div>
+            <p class="text-gray-600 mb-8">每个知识点配一个日常真实例子 + 小学生能看懂的解释，最后一句话总结“所以学这个有什么用”</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-3xl p-7 section-card hover:shadow-xl">
+                    <div class="flex gap-4">
+                        <div class="text-5xl">🛒</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-lg">因数和倍数</h4>
+                            <p class="mt-3 text-gray-600">妈妈买了24个苹果，要平均分给班上6个小朋友，每人分几个？24是6的倍数，6是24的因数！</p>
+                            <p class="mt-6 text-emerald-600 font-medium">所以学这个有什么用：分东西、排队、买礼物时不会算错份数啦！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl p-7 section-card hover:shadow-xl">
+                    <div class="flex gap-4">
+                        <div class="text-5xl">📦</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-lg">长方体体积</h4>
+                            <p class="mt-3 text-gray-600">你的书包长40cm、宽25cm、高15cm，能装多少立方厘米的东西？用长×宽×高就知道啦！</p>
+                            <p class="mt-6 text-emerald-600 font-medium">所以学这个有什么用：买新书包、装玩具、搬家时知道空间够不够！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl p-7 section-card hover:shadow-xl">
+                    <div class="flex gap-4">
+                        <div class="text-5xl">🍰</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-lg">分数的意义</h4>
+                            <p class="mt-3 text-gray-600">一个蛋糕平均切成8块，你吃了3块，就是3/8。把“1”平均分，拿几份就是几分之几！</p>
+                            <p class="mt-6 text-emerald-600 font-medium">所以学这个有什么用：分零食、分披萨、算考试成绩占比，再也不怕啦！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl p-7 section-card hover:shadow-xl">
+                    <div class="flex gap-4">
+                        <div class="text-5xl">📈</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-lg">折线统计图</h4>
+                            <p class="mt-3 text-gray-600">你记录一周每天做作业的时间，用折线图一看，哪天最累就清楚了，还能预测下周！</p>
+                            <p class="mt-6 text-emerald-600 font-medium">所以学这个有什么用：管理时间、看天气、了解成绩变化，生活更聪明！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl p-7 section-card hover:shadow-xl">
+                    <div class="flex gap-4">
+                        <div class="text-5xl">🏠</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-lg">长方体表面积</h4>
+                            <p class="mt-3 text-gray-600">给礼物盒包纸，需要包6个面。长20cm、宽15cm、高10cm，用公式算出总面积就够啦！</p>
+                            <p class="mt-6 text-emerald-600 font-medium">所以学这个有什么用：包装礼物、做手工、刷墙时知道要多少材料！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl p-7 section-card hover:shadow-xl">
+                    <div class="flex gap-4">
+                        <div class="text-5xl">🔍</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-lg">找次品（数学广角）</h4>
+                            <p class="mt-3 text-gray-600">一盒12个球，有一个是次品，用天平称3次就能找出！学会推理，像侦探一样聪明。</p>
+                            <p class="mt-6 text-emerald-600 font-medium">所以学这个有什么用：玩游戏、解决问题、考试时逻辑更强！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 避坑指南 -->
+        <div id="pitfall" class="scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-4xl">🛡️</span>
+                <h2 class="text-3xl font-bold text-gray-800">避坑指南 · 最常见的7大易错点</h2>
+            </div>
+            <p class="text-gray-600 mb-8">像好朋友一样提醒你：这些地方最容易丢分！每个坑都有错误示范 + 正确做法 + 记忆小口诀</p>
+
+            <div class="space-y-6">
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 flex gap-6">
+                    <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        1️⃣</div>
+                    <div class="flex-1">
+                        <h5 class="font-semibold">忘记1和本身也是因数</h5>
+                        <div class="mt-3 grid grid-cols-2 gap-6">
+                            <div><span class="text-red-500 text-sm font-medium">❌ 错误示范：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">18的因数只有2、3、6、9</p>
+                            </div>
+                            <div><span class="text-emerald-500 text-sm font-medium">✅ 正确做法：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">18的因数：1、2、3、6、9、18</p>
+                            </div>
+                        </div>
+                        <p class="text-xs mt-4 bg-white inline-block px-4 py-2 rounded-3xl">🔥 记忆口诀：因数找全，1和它本身千万别漏！</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 flex gap-6">
+                    <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        2️⃣</div>
+                    <div class="flex-1">
+                        <h5 class="font-semibold">3的倍数只看个位</h5>
+                        <div class="mt-3 grid grid-cols-2 gap-6">
+                            <div><span class="text-red-500 text-sm font-medium">❌ 错误示范：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">24不是3的倍数（个位4）</p>
+                            </div>
+                            <div><span class="text-emerald-500 text-sm font-medium">✅ 正确做法：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">2+4=6（是3的倍数）</p>
+                            </div>
+                        </div>
+                        <p class="text-xs mt-4 bg-white inline-block px-4 py-2 rounded-3xl">🔥 记忆口诀：3的倍数看各位数字和，不是看个位！
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 flex gap-6">
+                    <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        3️⃣</div>
+                    <div class="flex-1">
+                        <h5 class="font-semibold">表面积少算相对面</h5>
+                        <div class="mt-3 grid grid-cols-2 gap-6">
+                            <div><span class="text-red-500 text-sm font-medium">❌ 错误示范：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">长方体只算3个面面积</p>
+                            </div>
+                            <div><span class="text-emerald-500 text-sm font-medium">✅ 正确做法：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">2×(长×宽+长×高+宽×高)</p>
+                            </div>
+                        </div>
+                        <p class="text-xs mt-4 bg-white inline-block px-4 py-2 rounded-3xl">🔥 记忆口诀：表面积要乘2，相对面一对一对算！</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 flex gap-6">
+                    <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        4️⃣</div>
+                    <div class="flex-1">
+                        <h5 class="font-semibold">分数加减不先通分</h5>
+                        <div class="mt-3 grid grid-cols-2 gap-6">
+                            <div><span class="text-red-500 text-sm font-medium">❌ 错误示范：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">1/2 + 1/3 = 2/5（错）</p>
+                            </div>
+                            <div><span class="text-emerald-500 text-sm font-medium">✅ 正确做法：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">3/6 + 2/6 = 5/6</p>
+                            </div>
+                        </div>
+                        <p class="text-xs mt-4 bg-white inline-block px-4 py-2 rounded-3xl">🔥 记忆口诀：异分母，先通分，分子相加减！</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 flex gap-6">
+                    <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        5️⃣</div>
+                    <div class="flex-1">
+                        <h5 class="font-semibold">体积和表面积混淆</h5>
+                        <div class="mt-3 grid grid-cols-2 gap-6">
+                            <div><span class="text-red-500 text-sm font-medium">❌ 错误示范：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">正方体体积=6×棱长²（错）</p>
+                            </div>
+                            <div><span class="text-emerald-500 text-sm font-medium">✅ 正确做法：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">体积=棱长³，表面积=6×棱长²</p>
+                            </div>
+                        </div>
+                        <p class="text-xs mt-4 bg-white inline-block px-4 py-2 rounded-3xl">🔥 记忆口诀：体积“³”三维空间，表面积“²”六个面！
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 flex gap-6">
+                    <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        6️⃣</div>
+                    <div class="flex-1">
+                        <h5 class="font-semibold">奇偶数运算记反</h5>
+                        <div class="mt-3 grid grid-cols-2 gap-6">
+                            <div><span class="text-red-500 text-sm font-medium">❌ 错误示范：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">奇数+奇数=偶数（错）</p>
+                            </div>
+                            <div><span class="text-emerald-500 text-sm font-medium">✅ 正确做法：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">奇+奇=偶，奇+偶=奇</p>
+                            </div>
+                        </div>
+                        <p class="text-xs mt-4 bg-white inline-block px-4 py-2 rounded-3xl">🔥 记忆口诀：奇奇得偶，奇偶得奇，偶偶还是偶！</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 flex gap-6">
+                    <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        7️⃣</div>
+                    <div class="flex-1">
+                        <h5 class="font-semibold">找次品不按最优策略</h5>
+                        <div class="mt-3 grid grid-cols-2 gap-6">
+                            <div><span class="text-red-500 text-sm font-medium">❌ 错误示范：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">每次只称一个球</p>
+                            </div>
+                            <div><span class="text-emerald-500 text-sm font-medium">✅ 正确做法：</span>
+                                <p class="bg-white px-4 py-2 rounded-2xl mt-1">分组称（3 vs 3），3次找出次品</p>
+                            </div>
+                        </div>
+                        <p class="text-xs mt-4 bg-white inline-block px-4 py-2 rounded-3xl">🔥 记忆口诀：分组称天平，信息最多最聪明！</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-amber-600 mt-8 text-sm">⭐ 考试中最容易丢分的正是这些“小细节”！记住口诀，少丢分、多满分～ 祝你五年级数学100分！</p>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-sm opacity-60">本学习宝典根据人教版五年级下册数学教科书核心知识体系制作</p>
+            <p class="text-xs opacity-40 mt-3">支持无限练习 · 适合手机和平板 · 祝你数学成绩飞起！🚀</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind 初始化
+        function initTailwind() { return { config(userConfig = {}) { return { configUser: userConfig, theme: { extend: {} } } }, theme: { extend: {} } } }
+
+        // 思维导图交互
+        function toggleBranch(headerEl) {
+            const body = headerEl.nextElementSibling;
+            const toggle = headerEl.querySelector('.branch-toggle');
+            const isOpen = body.classList.contains('open');
+            if (isOpen) { body.classList.remove('open'); toggle.classList.remove('expanded'); }
+            else { body.classList.add('open'); toggle.classList.add('expanded'); }
+        }
+        function toggleSubTopics(nameEl) {
+            const sub = nameEl.nextElementSibling;
+            if (sub && sub.classList.contains('sub-topics')) sub.classList.toggle('open');
+        }
+        function mindmapExpandAll() {
+            document.querySelectorAll('.branch-body').forEach(b => b.classList.add('open'));
+            document.querySelectorAll('.branch-toggle').forEach(t => t.classList.add('expanded'));
+            document.querySelectorAll('.sub-topics').forEach(s => s.classList.add('open'));
+        }
+        function mindmapCollapseAll() {
+            document.querySelectorAll('.branch-body').forEach(b => b.classList.remove('open'));
+            document.querySelectorAll('.branch-toggle').forEach(t => t.classList.remove('expanded'));
+            document.querySelectorAll('.sub-topics').forEach(s => s.classList.remove('open'));
+        }
+        function initMindmap() { setTimeout(() => mindmapExpandAll(), 400); }
+
+        // 导航
+        function navigateTo(section) {
+            const el = document.getElementById(section);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 五年级下册题库
+        const questionBank = [
+            // 基础 level1
+            { id: 1, level: 1, type: 'choice', q: '18的因数有哪些？（选一个）', options: ['1,2,3,6,9,18', '1,2,3,6', '2,3,6,9'], 'answer': '1,2,3,6,9,18', explain: '一个数的因数包括1和它本身。' },
+            { id: 2, level: 1, type: 'fill', q: '24是（   ）的倍数，24的因数有（   ）。', answer: '3; 1,2,3,4,6,8,12,24', explain: '24÷3=8（整数），因数要找全。' },
+            { id: 3, level: 1, type: 'choice', q: '长方体表面积公式是？', options: ['长×宽×高', '2×(长×宽+长×高+宽×高)', '6×棱长²'], 'answer': '2×(长×宽+长×高+宽×高)', explain: '6个面，每对相对面面积相等。' },
+            { id: 4, level: 1, type: 'fill', q: '把1平均分成5份，取3份是（   ）。', answer: '3/5', explain: '分数意义：表示平均分的份数。' },
+            { id: 5, level: 1, type: 'choice', q: '2/3 + 1/6 = ？', options: ['1/2', '5/6', '1'], 'answer': '5/6', explain: '通分后 4/6 + 1/6 = 5/6。' },
+
+            // 提高 level2
+            { id: 6, level: 2, type: 'choice', q: '长6dm、宽5dm、高4dm的长方体体积是多少？', options: ['120dm³', '148dm²', '100dm³'], 'answer': '120dm³', explain: '体积=长×宽×高=6×5×4=120。' },
+            { id: 7, level: 2, type: 'fill', q: '一个正方体棱长5cm，表面积是（   ）cm²。', answer: '150', explain: '6×5²=150。' },
+            { id: 8, level: 2, type: 'choice', q: '下列哪个是3的倍数？', options: ['25', '36', '47'], 'answer': '36', explain: '3+6=9，是3的倍数。' },
+            { id: 9, level: 2, type: 'fill', q: '1/4 + 3/8 = （   ）（先通分）', answer: '5/8', explain: '2/8 + 3/8 = 5/8。' },
+            { id: 10, level: 2, type: 'choice', q: '观察物体（三）中，从三个方向看到的图形最多有几种？', options: ['3', '4', '6'], 'answer': '3', explain: '正视图、侧视图、俯视图。' },
+
+            // 挑战 level3
+            { id: 11, level: 3, type: 'fill', q: '鸡兔同笼有头10个，脚26只，兔有（   ）只。', answer: '3', explain: '设兔x，鸡(10-x) → 4x + 2(10-x)=26 → x=3。' },
+            { id: 12, level: 3, type: 'choice', q: '折线统计图主要用来做什么？', options: ['看单个数据', '看变化趋势和预测', '只画柱子'], 'answer': '看变化趋势和预测', explain: '折线能直观看出上升或下降。' },
+            { id: 13, level: 3, type: 'fill', q: '一个长方体体积120cm³，长10cm、宽4cm，高是（   ）cm。', answer: '3', explain: '高=120÷(10×4)=3。' },
+            { id: 14, level: 3, type: 'choice', q: '找次品时最优策略是？', options: ['每次称1个', '分组称3vs3', '全称一遍'], 'answer': '分组称3vs3', explain: '用天平分组称能最快找出。' },
+            { id: 15, level: 3, type: 'fill', q: '3/5 - 1/4 = （   ）', answer: '7/20', explain: '通分12 → 9/20 - 5/20 = 7/20。' }
+        ];
+
+        let currentQuiz = [];
+        let currentAnswers = {};
+        let currentLevel = 1;
+
+        function startPractice(level) {
+            currentLevel = level;
+            let filtered = questionBank.filter(q => q.level === level);
+            if (filtered.length < 10) filtered = filtered.concat(questionBank.filter(q => q.level !== level).slice(0, 10 - filtered.length));
+            currentQuiz = filtered.sort(() => Math.random() - 0.5).slice(0, 10);
+
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-active').classList.remove('hidden');
+
+            const badge = document.getElementById('current-level-badge');
+            badge.innerHTML = level === 1 ? '🟢 基础练习' : level === 2 ? '🟡 提高练习' : '🔴 挑战练习';
+
+            renderQuestions();
+            currentAnswers = {};
+            document.getElementById('score').textContent = '0';
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-list');
+            container.innerHTML = '';
+            currentQuiz.forEach((q, index) => {
+                let html = `
+                <div class="quiz-question border border-gray-100 rounded-3xl p-6 bg-white">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-indigo-100 text-indigo-600 w-8 h-8 flex items-center justify-center rounded-2xl flex-shrink-0 font-semibold">${index + 1}</div>
+                        <div class="flex-1">
+                            <p class="text-lg font-medium">${q.q}</p>`;
+                if (q.type === 'choice') {
+                    html += `<div class="mt-6 grid grid-cols-2 gap-3">`;
+                    q.options.forEach(opt => {
+                        html += `<label onclick="recordAnswer(${index}, '${opt}')" class="cursor-pointer flex items-center gap-3 border border-gray-200 hover:border-indigo-300 rounded-2xl px-5 py-4 transition-colors">
+                            <input type="radio" name="q${index}" class="accent-indigo-500" ${currentAnswers[index] === opt ? 'checked' : ''}>
+                            <span class="text-gray-700">${opt}</span>
+                        </label>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<div class="mt-6"><input type="text" id="fill-${index}" value="${currentAnswers[index] || ''}" oninput="recordAnswer(${index}, this.value.trim())" class="w-full border border-gray-200 focus:border-indigo-400 rounded-3xl px-6 py-5 text-xl outline-none"></div>`;
+                }
+                html += `<div id="feedback-${index}" class="hidden mt-4 text-sm"></div></div></div>`;
+                container.innerHTML += html;
+            });
+            document.getElementById('progress').textContent = '1';
+        }
+
+        function recordAnswer(index, value) { currentAnswers[index] = value; }
+
+        function checkAllAnswers() {
+            let score = 0;
+            currentQuiz.forEach((q, index) => {
+                const fb = document.getElementById(`feedback-${index}`);
+                fb.classList.remove('hidden');
+                const user = currentAnswers[index] || '';
+                if (String(user).toLowerCase() === String(q.answer).toLowerCase()) {
+                    fb.innerHTML = `<span class="text-emerald-500 font-medium feedback-correct">✅ 正确！</span><br><span class="text-gray-500">${q.explain}</span>`;
+                    score++;
+                } else {
+                    fb.innerHTML = `<span class="text-red-500 font-medium">❌ 错误</span><br>正确答案：<span class="font-semibold">${q.answer}</span><br><span class="text-gray-500">${q.explain}</span>`;
+                }
+            });
+            document.getElementById('score').textContent = score;
+        }
+
+        function endPractice() {
+            if (confirm('确定结束本次练习吗？')) {
+                document.getElementById('quiz-active').classList.add('hidden');
+                document.getElementById('quiz-start-screen').classList.remove('hidden');
+            }
+        }
+
+        function generateNewQuiz() { startPractice(currentLevel); }
+
+        function startNewPractice() {
+            navigateTo('practice');
+            setTimeout(() => startPractice(1), 600);
+        }
+
+        window.onload = function () {
+            initTailwind();
+            initMindmap();
+            console.log('%c✅ 五年级数学下册学习宝典加载成功！祝学习愉快～', 'color:#3b82f6;font-size:13px;font-weight:600');
+        };
+    </script>
+</body>
+
+</html>
+```
